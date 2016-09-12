@@ -5,24 +5,31 @@ Just Another Node Argument Parser is a super small and super flexible command li
 I wrote this because all other argument parsers out there were large, had dependencies, or didn't allow customization
 
 # Install
+```bash
     npm install janap
+```
 
 # Use
+```javascript
     var janap = require('janap');
     var args = janap.parse(process.argv);
 
     //args contain parsed arguments
     //i.e. node myscript.js --arg1=false --boolean -hello world
     // = {arg1: false, boolean: true, hello: "world"}
+```
 
 # Skip Initial parsing (argument 0 and 1)
+```javascript
     var janap = require('janap');
     var args = janap.parse(process.argv.slice(2), {
       _initial: false
     });
+```
 
 # Data Types
 With Janap you can force a data type per-argument:
+```javascript
     var janap = require('janap');
     var args = janap.parse(process.argv, {
       force: Boolean,
@@ -31,8 +38,10 @@ With Janap you can force a data type per-argument:
     });
 
     //note: you can also use strings such as "bool", "boolean", "number", "array", or something custom
+```
 
 # Aliases
+```javascript
     var janap = require('janap');
     var args = janap.parse(process.argv, {
       _alias: {
@@ -41,10 +50,11 @@ With Janap you can force a data type per-argument:
     });
 
     //Arguments of "--o=value" or "-o value" will result in "args" object of {option: value}
+```
 
 # Customize
 Janap was built with customization in mind. You can override 'match' to specify your own argument format:
-
+```javascript
     var janap = require('janap');
     janap.match = function(arg) {
       //We want triple dashes on our arguments
@@ -54,9 +64,11 @@ Janap was built with customization in mind. You can override 'match' to specify 
     }
 
     var args = janap.parse(process.argv);
+```
 
 # Custom type converters
 With Janap you can specify custom type converters. Just pass in a "_converter" key to the options object to specify your own custom converter:
+```javascript    
     var janap = require('janap');
 
     function MyArgumentConverter() {
@@ -105,5 +117,6 @@ With Janap you can specify custom type converters. Just pass in a "_converter" k
     var args = janap.parse(process.argv, {
       _converter: new MyArgumentConverter()
     });
+```
 
 # Enjoy! :)
