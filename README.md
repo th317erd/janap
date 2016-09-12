@@ -25,22 +25,22 @@ I wrote this because all other argument parsers out there were large, had depend
 With Janap you can force a data type per-argument:
     var janap = require('janap');
     var args = janap.parse(process.argv, {
-    	force: Boolean,
-    	count: Number,
-    	paths: Array
+      force: Boolean,
+      count: Number,
+      paths: Array
     });
 
     //note: you can also use strings such as "bool", "boolean", "number", "array", or something custom
 
 # Aliases
-   var janap = require('janap');
-   var args = janap.parse(process.argv, {
-     _alias: {
-       'o': 'option'
-     }
-   });
+    var janap = require('janap');
+    var args = janap.parse(process.argv, {
+      _alias: {
+        'o': 'option'
+      }
+    });
 
-   //Arguments of "--o=value" or "-o value" will result in "args" object of {option: value}
+    //Arguments of "--o=value" or "-o value" will result in "args" object of {option: value}
 
 # Customize
 Janap was built with customization in mind. You can override 'match' to specify your own argument format:
@@ -59,46 +59,46 @@ With Janap you can specify custom type converters. Just pass in a "_converter" k
     var janap = require('janap');
 
     function MyArgumentConverter() {
-    	janap.ArgumentConverter.call();
+      janap.ArgumentConverter.call();
     }
 
     var p = MyArgumentConverter.prototype = Object.create(ArgumentConverter.prototype);
     p.constructor = MyArgumentConverter;
     p.convertValue = function(value, type) {
-    	if (this.name === 'my-special-case-argument')
-    		return 'some other value';
+      if (this.name === 'my-special-case-argument')
+        return 'some other value';
 
-    	//Custom data-type, specified through {'my-argument': 'custom'} in the options object
-    	if (type === 'custom')
-    		return myCustomValueConverter(value);
+      //Custom data-type, specified through {'my-argument': 'custom'} in the options object
+      if (type === 'custom')
+        return myCustomValueConverter(value);
 
-    	if (type === 'number')
-    		return this.toNumber(value);
+      if (type === 'number')
+        return this.toNumber(value);
 
-    	if (type === 'boolean')
-    		return this.toBoolean(value);
+      if (type === 'boolean')
+        return this.toBoolean(value);
 
-    	//this.continue tells the parser to use this value,
-    	//but continue onto with the next argument using the same "name" / key
-    	if (type === 'array') {
-    		var currentValue = this.get(this.name);
-    		if (currentValue === undefined) {
-    			//Not set yet
-    			return this.continue([value]);
-    		}
+      //this.continue tells the parser to use this value,
+      //but continue onto with the next argument using the same "name" / key
+      if (type === 'array') {
+        var currentValue = this.get(this.name);
+        if (currentValue === undefined) {
+          //Not set yet
+          return this.continue([value]);
+        }
 
-    		return this.continue(currentValue.concat(value));
-    	}
+        return this.continue(currentValue.concat(value));
+      }
 
-    	if (this.name === 'do-stuff') {
-    		//This adds/sets an argument called "doStuffRequested" to true in the final arguments object
-    		this.set('doStuffRequested', true);
-    		return value;
-    	}
+      if (this.name === 'do-stuff') {
+        //This adds/sets an argument called "doStuffRequested" to true in the final arguments object
+        this.set('doStuffRequested', true);
+        return value;
+      }
 
       //Default value converter
       //super is a convenience helper that is always set to "ArgumentConverter.prototype"
-    	return this.super.convertValue(value, type);
+      return this.super.convertValue(value, type);
     };
 
     var args = janap.parse(process.argv, {
