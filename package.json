@@ -11,9 +11,15 @@
     "url": "git+https://github.com/th317erd/janap.git"
   },
   "keywords": [
-    "Argument",
-    "Parser",
-    "Node"
+    "argument",
+    "arguments",
+    "parser",
+    "node",
+    "parse arguments",
+    "shell",
+    "shell argument",
+    "shell arguments",
+    "command line"
   ],
   "author": "Wyatt Greenway",
   "license": "MIT",
