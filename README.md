@@ -44,6 +44,7 @@ With Janap you can force a data type per-argument:
 
 # Customize
 Janap was built with customization in mind. You can override 'match' to specify your own argument format:
+
     var janap = require('janap');
     janap.match = function(arg) {
       //We want triple dashes on our arguments
