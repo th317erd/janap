@@ -27,6 +27,20 @@ var args = janap.parse(process.argv.slice(2), {
 });
 ```
 
+# Defaults
+Defaults can be specified simply by passing a **defaults** property into the options
+```javascript
+var janap = require('janap'),
+    path = require('path');
+
+var args = janap.parse(process.argv, {
+  _defaults: {
+    force: true,
+    path: path.resolve()
+  }
+});
+```
+
 # Data Types
 With janap you can force a data type per-argument:
 ```javascript
@@ -58,7 +72,7 @@ janap was built with customization in mind. You can override 'match' to specify 
 var janap = require('janap');
 janap.match = function(arg) {
   //We want triple dashes on our arguments
-  //the second match is always the value
+  //the second capture group is always the value
   //i.e. ---argument=value
   return ('' + arg).match(/^---([\w-]+)(?:=(.*))?$/);
 }
@@ -72,7 +86,7 @@ With janap you can specify custom type converters. Just pass in a "_converter" k
 var janap = require('janap');
 
 function MyArgumentConverter() {
-  janap.ArgumentConverter.call();
+  janap.ArgumentConverter.call(this);
 }
 
 var p = MyArgumentConverter.prototype = Object.create(ArgumentConverter.prototype);

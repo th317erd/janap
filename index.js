@@ -135,8 +135,8 @@
 	}
 
 	function parse(_args, _opts) {
-		var json = {},
-				opts = _opts || {},
+		var opts = _opts || {},
+				json = opts._defaults || {},
 				args = _args,
 				initial = opts._initial,
 				key = undefined, value = undefined,
@@ -190,7 +190,8 @@
 					
 					key = undefined;
 				} else {
-					json[key] = undefined;
+					if (!json.hasOwnProperty(key))
+						json[key] = undefined;
 				}
 
 				value = undefined;
