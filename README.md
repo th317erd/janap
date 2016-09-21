@@ -20,6 +20,7 @@ var args = janap.parse(process.argv);
 ```
 
 # Skip Initial parsing (argument 0 and 1)
+You can tell janap NOT to skip arguments 0 and 1 by setting the **_initial** option to *false*
 ```javascript
 var janap = require('janap');
 var args = janap.parse(process.argv.slice(2), {
@@ -28,7 +29,7 @@ var args = janap.parse(process.argv.slice(2), {
 ```
 
 # Defaults
-Defaults can be specified simply by passing a **defaults** property into the options
+Defaults can be specified simply by passing a **_defaults** object into the options
 ```javascript
 var janap = require('janap'),
     path = require('path');
@@ -125,7 +126,7 @@ p.convertValue = function(value, type) {
 
   //Default value converter
   //super is a convenience helper that is always set to "ArgumentConverter.prototype"
-  return this.super.convertValue(value, type);
+  return this.super.convertValue.call(this, value, type);
 };
 
 var args = janap.parse(process.argv, {
