@@ -107,6 +107,8 @@
 					return this.toBoolean(value);
 				case 'number':
 					return this.toNumber(value);
+				case 'string':
+					return value;
 				default:
 					return this.coerce(value);
 			}
