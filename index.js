@@ -100,7 +100,9 @@
 
 					var currentValue = this.get(this.name);
 					if (currentValue === undefined)
-						return this.continue(value);
+            return this.continue(value);
+          else if (currentValue === true)
+            currentValue = [];
 
 					return this.continue(currentValue.concat(value));
 				case 'boolean':
