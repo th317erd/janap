@@ -20,7 +20,7 @@
 			return 'boolean';
 
 		if (val === Array || val === 'array' || val instanceof Array)
-			return 'array';
+			return (val instanceof Array) ? ('array:' + getType(val[0])) : 'array';
 
 		if (val === Number || val === 'number' || val instanceof Number)
 			return 'number';
@@ -80,40 +80,42 @@
 			var type = _type || 'undefined',
 					value = _value;
 
-			switch(type) {
-				case 'array':
-					if (('' + value).match(/^\s*\[/)) {
-						var parts = ('' + value).trim().replace(/^.*?\[/,'').replace(/\].*$/,'').split(/[\s,]+\s*/g),
-								finalArray = [];
+			if (type === 'boolean') {
+        return this.toBoolean(value);
+      } else if (type === 'number') {
+        return this.toNumber(value);
+      } else if (type === 'string') {
+        return value;
+      } else if (type.match(/^array/)) {
+        var typeParts = type.split(/:/g),
+            subType = '' + typeParts[1];
 
-						for (var i = 0, il = parts.length; i < il; i++)
-							finalArray.push(this.coerce(parts[i]));
+        if (('' + value).match(/^\s*\[/)) {
+          var parts = ('' + value).trim().replace(/^.*?\[/,'').replace(/\].*$/,'').split(/[\s,]+\s*/g),
+              finalArray = [];
 
-						value = finalArray;
-					}
+          for (var i = 0, il = parts.length; i < il; i++)
+            finalArray.push(this.convertValue(parts[i], subType));
 
-					if (!(value instanceof Array))
-						value = this.coerce(value);
+          value = finalArray;
+        }
 
-					if (!(value instanceof Array))
-						value = [value];
+        if (!(value instanceof Array))
+          value = this.convertValue(value, subType);
 
-					var currentValue = this.get(this.name);
-					if (currentValue === undefined)
-            return this.continue(value);
-          else if (currentValue === true)
-            currentValue = [];
+        if (!(value instanceof Array))
+          value = [value];
 
-					return this.continue(currentValue.concat(value));
-				case 'boolean':
-					return this.toBoolean(value);
-				case 'number':
-					return this.toNumber(value);
-				case 'string':
-					return value;
-				default:
-					return this.coerce(value);
-			}
+        var currentValue = this.get(this.name);
+        if (currentValue === undefined)
+          return this.continue(value);
+        else if (currentValue === true)
+          currentValue = [];
+
+        return this.continue(currentValue.concat(value));
+      } else {
+        return this.coerce(value);
+      }
 		},
 		convert: function(value) {
 			var name = this.name,
@@ -160,7 +162,7 @@
 
 		for (var i = 0, il = args.length; i < il; i++) {
 			var arg = args[i];
-			
+
 			if (initial !== false && i === 0) {
 				json._env = arg;
 				continue;
@@ -177,7 +179,7 @@
 					value = arg;
 				} else {
 					json[indexKey++] = arg;
-					continue;	
+					continue;
 				}
 			} else {
 				if (key && json[key] === undefined)
@@ -190,8 +192,8 @@
 				if (parts.length > 2 && parts[2] !== undefined) {
  					value = converter.convert(parts[2]);
 
- 					json[key] = (value instanceof ArgumentParserContinue) ? value.value : value;			
-					
+ 					json[key] = (value instanceof ArgumentParserContinue) ? value.value : value;
+
 					key = undefined;
 				} else {
 					if (!json.hasOwnProperty(key))
