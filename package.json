@@ -4,7 +4,7 @@
   "description": "Just Another Node Argument Parser",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/jasmine"
   },
   "repository": {
     "type": "git",
@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/th317erd/janap/issues"
   },
-  "homepage": "https://github.com/th317erd/janap#readme"
+  "homepage": "https://github.com/th317erd/janap#readme",
+  "dependencies": {
+    "jasmine": "^3.9.0"
+  }
 }
