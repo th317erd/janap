@@ -228,7 +228,7 @@
     if (key && json[key] === undefined)
       json[key] = true;
 
-    var defaultKeys = Object.keys(defaults);
+    var defaultKeys = Object.keys(defaults || {});
     for (var i = 0, il = defaultKeys.length; i < il; i++) {
       var defaultKey = defaultKeys[i];
       if (json[defaultKey] === undefined)
